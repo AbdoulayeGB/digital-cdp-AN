@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Database, Upload, Download, Search, Filter, Building2 } from 'lucide-react';
 import { mockEntreprises } from '../../data/mockData';
 import { Entreprise } from '../../types';
+import * as XLSX from 'xlsx';
 
 export default function BaseDonneesSection() {
   const [entreprises] = useState<Entreprise[]>(mockEntreprises);
@@ -17,6 +18,26 @@ export default function BaseDonneesSection() {
   });
 
   const secteurs = [...new Set(entreprises.map(e => e.secteurActivite))];
+
+  const handleExport = () => {
+    // Préparation des données pour l'export
+    const exportData = filteredEntreprises.map(entreprise => ({
+      'Nom': entreprise.nom,
+      'NINEA': entreprise.ninea,
+      'Email': entreprise.email,
+      'Secteur': entreprise.secteurActivite,
+      'Date Inscription': new Date(entreprise.dateInscription).toLocaleDateString('fr-FR'),
+      'Statut': entreprise.statut
+    }));
+
+    // Création du workbook
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Entreprises");
+
+    // Export du fichier
+    XLSX.writeFile(wb, "base_donnees_entreprises.xlsx");
+  };
 
   return (
     <div className="space-y-6">
@@ -34,7 +55,10 @@ export default function BaseDonneesSection() {
             <Upload className="w-5 h-5 mr-2" />
             Import Données
           </button>
-          <button className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors">
+          <button 
+            onClick={handleExport}
+            className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
+          >
             <Download className="w-4 h-4 mr-2" />
             Exporter
           </button>

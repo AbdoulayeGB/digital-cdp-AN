@@ -111,9 +111,6 @@ export default function ReceptissesSection() {
                   Date Émission
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Validité
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type Document
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -124,9 +121,6 @@ export default function ReceptissesSection() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredRecepissés.map((recepisse) => {
                 const demande = getDemandeById(recepisse.demandeId);
-                const isExpiringSoon = new Date(recepisse.validiteJusquau) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-                const isExpired = new Date(recepisse.validiteJusquau) < new Date();
-                
                 return (
                   <tr key={recepisse.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -140,21 +134,6 @@ export default function ReceptissesSection() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {new Date(recepisse.dateEmission).toLocaleDateString('fr-FR')}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {new Date(recepisse.validiteJusquau).toLocaleDateString('fr-FR')}
-                      </div>
-                      {isExpired && (
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 mt-1">
-                          Expiré
-                        </span>
-                      )}
-                      {!isExpired && isExpiringSoon && (
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 mt-1">
-                          Expire bientôt
-                        </span>
-                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">

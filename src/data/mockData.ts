@@ -96,32 +96,52 @@ export const mockDemandes: Demande[] = [
 
 export const mockMissions: MissionControle[] = [
   {
-    id: '1',
-    numeroMission: 'MISS-2024-001',
-    entrepriseId: '1',
-    dateMission: '2024-02-15',
-    typeMission: 'inspection',
-    statut: 'terminée',
-    rapport: 'Conformité générale respectée. Quelques améliorations suggérées.',
-    sanctions: 'Aucune',
-    suivi: 'Rapport de suivi dans 6 mois'
-  },
-  {
-    id: '2',
-    numeroMission: 'MISS-2024-002',
-    entrepriseId: '2',
-    dateMission: '2024-03-10',
-    typeMission: 'audit',
+    id: 1,
+    numeroMission: 'M2024-001',
+    entrepriseId: 1,
+    dateMission: '2024-03-15',
+    typeMission: 'controle_sur_place',
     statut: 'en_cours',
-    rapport: 'Mission en cours d\'exécution'
+    lieu: 'Siège social',
+    equipe: [
+      { nom: 'Dr. Amadou Diallo', role: 'Chef de mission' },
+      { nom: 'Mme. Fatoumata Touré', role: 'Contrôleur' }
+    ],
+    rapport: 'Rapport préliminaire en cours de rédaction',
+    sanctions: null,
+    suivi: 'Première visite effectuée'
   },
   {
-    id: '3',
-    numeroMission: 'MISS-2024-003',
-    entrepriseId: '3',
+    id: 2,
+    numeroMission: 'M2024-002',
+    entrepriseId: 2,
     dateMission: '2024-03-20',
-    typeMission: 'enquete',
-    statut: 'planifiée'
+    typeMission: 'controle_en_ligne',
+    statut: 'planifie',
+    lieu: 'Plateforme en ligne',
+    equipe: [
+      { nom: 'Dr. Amadou Diallo', role: 'Chef de mission' },
+      { nom: 'M. Mamadou Keita', role: 'Expert technique' }
+    ],
+    rapport: null,
+    sanctions: null,
+    suivi: null
+  },
+  {
+    id: 3,
+    numeroMission: 'M2024-003',
+    entrepriseId: 3,
+    dateMission: '2024-03-25',
+    typeMission: 'controle_simplifie',
+    statut: 'termine',
+    lieu: 'Agence régionale',
+    equipe: [
+      { nom: 'Mme. Fatoumata Touré', role: 'Chef de mission' },
+      { nom: 'M. Mamadou Keita', role: 'Contrôleur' }
+    ],
+    rapport: 'Rapport final validé',
+    sanctions: 'Avertissement',
+    suivi: 'Suivi des recommandations en cours'
   }
 ];
 
@@ -131,7 +151,27 @@ export const mockRecepissés: Recepisse[] = [
     numeroRecepisse: 'REC-2024-001',
     demandeId: '1',
     dateEmission: '2024-01-25',
-    validiteJusquau: '2025-01-25',
+    typeDocument: 'Autorisation de traitement'
+  },
+  {
+    id: '2',
+    numeroRecepisse: 'REC-2024-002',
+    demandeId: '2',
+    dateEmission: '2024-02-15',
+    typeDocument: 'Déclaration de conformité'
+  },
+  {
+    id: '3',
+    numeroRecepisse: 'REC-2024-003',
+    demandeId: '3',
+    dateEmission: '2024-03-01',
+    typeDocument: 'Certification de sécurité'
+  },
+  {
+    id: '4',
+    numeroRecepisse: 'REC-2023-001',
+    demandeId: '4',
+    dateEmission: '2023-12-01',
     typeDocument: 'Autorisation de traitement'
   }
 ];
