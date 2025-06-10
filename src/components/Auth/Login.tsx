@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { authenticateUser } from '../../data/auth';
+import { authenticateUser } from '../../services/authService';
 
 interface LoginProps {
   onLogin: (user: any) => void;
@@ -108,4 +108,4 @@ export default function Login({ onLogin }: LoginProps) {
       </div>
     </div>
   );
-} 
+}

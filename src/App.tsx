@@ -9,8 +9,8 @@ import ReceptissesSection from './components/Recepissés/ReceptissesSection';
 import ParametresSection from './components/Parametres/ParametresSection';
 import Login from './components/Auth/Login';
 import NewDemandeModal from './components/Demandes/NewDemandeModal';
-import { User, initializeAdminUser } from './data/auth';
-import { Demande } from './types';
+import { User, initializeAdminUser } from './services/authService';
+import { Demande, getDemandes, createDemande, generateNumeroReference } from './services/demandeService';
 import { 
   Home, 
   FileText, 
@@ -63,12 +63,37 @@ export default function App() {
     setShowNewDemandeModal(false);
   }, []);
 
-  const handleAddDemande = useCallback((newDemande: Demande) => {
-    setDemandes(prevDemandes => [...prevDemandes, newDemande]);
-    setShowNewDemandeModal(false); // Fermer le modal après soumission
-    setSelectedFormType(null);
-    setActiveSection('demandes'); // Revenir à la section des demandes
+  const loadDemandes = useCallback(async () => {
+    try {
+      const demandesData = await getDemandes();
+      setDemandes(demandesData);
+    } catch (error) {
+      console.error('Erreur lors du chargement des demandes:', error);
+    }
   }, []);
+
+  const handleAddDemande = useCallback(async (newDemandeData: any) => {
+    try {
+      // Créer d'abord l'entreprise si elle n'existe pas
+      // Pour simplifier, on va utiliser un ID d'entreprise existant ou créer une logique plus complexe
+      const demandeToCreate = {
+        numero_reference: generateNumeroReference(),
+        type_demande: newDemandeData.type,
+        entreprise_id: '1', // À adapter selon votre logique
+        statut: 'en_attente' as const,
+        details: newDemandeData.details
+      };
+
+      await createDemande(demandeToCreate);
+      await loadDemandes(); // Recharger les demandes
+      setShowNewDemandeModal(false);
+      setSelectedFormType(null);
+      setActiveSection('demandes');
+    } catch (error) {
+      console.error('Erreur lors de la création de la demande:', error);
+      alert('Erreur lors de la création de la demande');
+    }
+  }, [loadDemandes]);
 
   const menuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Tableau de bord', icon: <Home className="w-5 h-5" />, path: '/dashboard' },
@@ -112,6 +137,12 @@ export default function App() {
   useEffect(() => {
     initializeAdminUser();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadDemandes();
+    }
+  }, [user, loadDemandes]);
 
   const renderSection = useCallback(() => {
     switch (activeSection) {

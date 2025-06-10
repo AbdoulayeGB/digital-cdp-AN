@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { User } from '../../data/auth'; 
-import { getStoredUsers, addUser, updateUser, deleteUser } from '../../data/auth';
+import { User, getStoredUsers, addUser, updateUser, deleteUser } from '../../services/authService';
 
 export default function UserManagementSection() {
   const [username, setUsername] = useState(''); 
@@ -9,9 +8,9 @@ export default function UserManagementSection() {
   const [users, setUsers] = useState<User[]>([]); 
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
-  const loadUsers = useCallback(() => {
-    const storedUsers = getStoredUsers();
-    setUsers(storedUsers.map(user => ({ ...user, password: '' }))); // Ne pas stocker les mots de passe dans l'état local
+  const loadUsers = useCallback(async () => {
+    const storedUsers = await getStoredUsers();
+    setUsers(storedUsers);
   }, []);
 
   useEffect(() => {
@@ -89,7 +88,7 @@ export default function UserManagementSection() {
 
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
       try {
-        deleteUser(id);
+        await deleteUser(id);
         loadUsers(); // Recharger la liste des utilisateurs après suppression
         alert("Utilisateur supprimé.");
       } catch (error) {
@@ -190,4 +189,4 @@ export default function UserManagementSection() {
       </div>
     </div>
   );
-} 
+}
